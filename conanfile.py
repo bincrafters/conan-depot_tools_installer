@@ -9,14 +9,16 @@ class DepotToolsConan(ConanFile):
     description = "A collection of tools for dealing with Chromium development"
     url = "https://github.com/SSE4/conan-depot_tools_installer"
     no_copy_source = True
-    settings = {"os": ["Macos", "iOS"]}
+    short_paths = True
+    settings = {"os"}
     repository = "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
 
     def source(self):
-        if self.settings.os == "Macos" or self.settings.os == "iOS":
-            self.run("git clone %s" % self.repository)
+        if self.settings.os == "Windows":
+            url = "https://storage.googleapis.com/chrome-infra/depot_tools.zip"
+            tools.get(url)
         else:
-            raise Exception("unsupported os %s" % self.settings.os)
+            self.run("git clone %s" % self.repository)
 
     def package(self):
         self.copy(pattern="*", dst=".", src=".")
