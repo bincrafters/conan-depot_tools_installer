@@ -53,6 +53,8 @@ class DepotToolsConan(ConanFile):
                         elif \
                                 sig == [0xCA, 0xFE, 0xBA, 0xBE] or \
                                 sig == [0xBE, 0xBA, 0xFE, 0xCA] or \
+                                sig == [0xFE, 0xED, 0xFA, 0xCF] or \
+                                sig == [0xCF, 0xFA, 0xED, 0xFE] or \
                                 sig == [0xFE, 0xED, 0xFA, 0xCE] or \
                                 sig == [0xCE, 0xFA, 0xED, 0xFE]:
                             self.output.warn('chmod on Mach-O file %s' % file)
