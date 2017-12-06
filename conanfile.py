@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
 from conans import ConanFile, tools
 import os
 
@@ -29,6 +33,30 @@ class DepotToolsConan(ConanFile):
     def package(self):
         self.copy(pattern="*", dst=".", src=".")
 
+    def fix_permissions(self):
+        def chmod_plus_x(name):
+            os.chmod(name, os.stat(name).st_mode | 0o111)
+
+        if os.name == 'posix':
+            for root, _, files in os.walk(self.package_folder):
+                for file in files:
+                    filename = os.path.join(root, file)
+                    with open(filename, 'rb') as f:
+                        sig = f.read(4)
+                        if len(sig) >= 2 and sig[0] == 0x23 and sig[1] == 0x21:
+                            print('chmod on script file %s' % file)
+                            chmod_plus_x(filename)
+                        elif sig == [0x7F, 0x45, 0x4C, 0x46]:
+                            print('chmod on ELF file %s' % file)
+                            chmod_plus_x(filename)
+                        elif \
+                                sig == [0xCA, 0xFE, 0xBA, 0xBE] or \
+                                sig == [0xBE, 0xBA, 0xFE, 0xCA] or \
+                                sig == [0xFE, 0xED, 0xFA, 0xCE] or \
+                                sig == [0xCE, 0xFA, 0xED, 0xFE]:
+                            print('chmod on Mach-O file %s' % file)
+                            chmod_plus_x(filename)
+
     def package_info(self):
-        bin_path = os.path.join(self.package_folder)
-        self.env_info.path.append(bin_path)
+        self.fix_permissions()
+        self.env_info.path.append(self.package_folder)
