@@ -7,7 +7,7 @@ import os
 
 
 class DepotToolsConan(ConanFile):
-    name = "depot_tools"
+    name = "depot_tools_installer"
     version = "master"
     license = "Chromium"
     description = "A collection of tools for dealing with Chromium development"
