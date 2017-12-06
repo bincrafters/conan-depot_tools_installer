@@ -42,6 +42,8 @@ class DepotToolsConan(ConanFile):
                     filename = os.path.join(root, file)
                     with open(filename, 'rb') as f:
                         sig = f.read(4)
+                        if type(sig) is str:
+                            sig = [ord(s) for s in sig]
                         if len(sig) >= 2 and sig[0] == 0x23 and sig[1] == 0x21:
                             self.output.warn('chmod on script file %s' % file)
                             chmod_plus_x(filename)
