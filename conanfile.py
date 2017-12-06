@@ -13,6 +13,12 @@ class DepotToolsConan(ConanFile):
     settings = {"os"}
     repository = "https://chromium.googlesource.com/chromium/tools/depot_tools.git"
 
+    def system_requirements(self):
+        if self.settings.os == "Linux":
+            if str(tools.os_info.linux_distro) in ["ubuntu", "debian"]:
+                installer = tools.SystemPackageTool()
+                installer.install('ca-certificates')
+
     def source(self):
         if self.settings.os == "Windows":
             url = "https://storage.googleapis.com/chrome-infra/depot_tools.zip"
