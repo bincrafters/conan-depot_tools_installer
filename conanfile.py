@@ -62,4 +62,4 @@ class DepotToolsConan(ConanFile):
 
     def package_info(self):
         self.fix_permissions()
-        self.env_info.path.append(self.package_folder)
+        self.env_info.PATH.append(self.package_folder)
