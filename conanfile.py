@@ -30,7 +30,10 @@ class DepotToolsConan(ConanFile):
             self.run("git clone %s" % self.repository)
 
     def package(self):
-        self.copy(pattern="*", dst=".", src=".")
+        if self.settings.os == "Windows":
+            self.copy(pattern="*", dst=".", src=".")
+        else:
+            self.copy(pattern="*", dst=".", src="depot_tools")
 
     def fix_permissions(self):
         def chmod_plus_x(name):
