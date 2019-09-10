@@ -5,4 +5,4 @@ import os
 class TestPackage(ConanFile):
 
     def test(self):
-        self.run("gclient --help")
+        self.run("gclient --version", run_environment=True)
