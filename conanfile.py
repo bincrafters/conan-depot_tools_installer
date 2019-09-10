@@ -9,10 +9,11 @@ import sys
 class DepotToolsConan(ConanFile):
     name = "depot_tools_installer"
     version = "20190909"
-    license = "Chromium"
+    license = "BSD-3-Clause"
     description = "A collection of tools for dealing with Chromium development"
     url = "https://github.com/reneme/conan-depot_tools_installer"
     homepage = "https://chromium.googlesource.com/chromium/tools/depot_tools"
+    author = "Bincrafters <bincrafters@gmail.com>"
     no_copy_source = True
     short_paths = True
 
