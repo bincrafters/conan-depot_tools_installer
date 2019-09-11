@@ -34,6 +34,7 @@ class DepotToolsConan(ConanFile):
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
         self.copy(pattern="*", dst="bin", src=self._source_subfolder)
+        self._fix_permissions()
 
     def _fix_permissions(self):
 
@@ -49,10 +50,10 @@ class DepotToolsConan(ConanFile):
                         if type(sig) is str:
                             sig = [ord(s) for s in sig]
                         if len(sig) >= 2 and sig[0] == 0x23 and sig[1] == 0x21:
-                            self.output.warn('chmod on script file %s' % file)
+                            self.output.info('chmod on script file %s' % file)
                             chmod_plus_x(filename)
                         elif sig == [0x7F, 0x45, 0x4C, 0x46]:
-                            self.output.warn('chmod on ELF file %s' % file)
+                            self.output.info('chmod on ELF file %s' % file)
                             chmod_plus_x(filename)
                         elif \
                                 sig == [0xCA, 0xFE, 0xBA, 0xBE] or \
@@ -70,4 +71,3 @@ class DepotToolsConan(ConanFile):
         self.env_info.PATH.append(bin_folder)
         # Don't update gclient automatically when running it
         self.env_info.DEPOT_TOOLS_UPDATE = "0"
-        self._fix_permissions()
