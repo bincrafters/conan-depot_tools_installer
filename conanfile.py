@@ -8,10 +8,10 @@ import sys
 
 class DepotToolsConan(ConanFile):
     name = "depot_tools_installer"
-    version = "20190909"
+    version = "20190916"
     license = "BSD-3-Clause"
     description = "A collection of tools for dealing with Chromium development"
-    url = "https://github.com/reneme/conan-depot_tools_installer"
+    url = "https://github.com/bincrafters/conan-depot_tools_installer"
     homepage = "https://chromium.googlesource.com/chromium/tools/depot_tools"
     author = "Bincrafters <bincrafters@gmail.com>"
     no_copy_source = True
@@ -26,7 +26,7 @@ class DepotToolsConan(ConanFile):
             self.output.warn("Chromium depot_tools is not well supported by Python 3!")
 
     def source(self):
-        commit = "e5641be5fe309f40aad850d4d1e1ca607768572c"
+        commit = "4a60db4c3e62239e471dc69906353fcf0384920a"
         tools.mkdir(self._source_subfolder)
         with tools.chdir(self._source_subfolder):
             tools.get("{}/+archive/{}.tar.gz".format(self.homepage, commit))

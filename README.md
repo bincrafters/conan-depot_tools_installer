@@ -1,23 +1,23 @@
-[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/somelib%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/somelib%3Abincrafters/_latestVersion)
-[![Build Status](https://travis-ci.com/bincrafters/conan-somelib.svg?branch=stable%2F0.0.0)](https://travis-ci.com/bincrafters/conan-somelib)
-[![Build status](https://ci.appveyor.com/api/projects/status/sxs9n6vb8nqa92l5?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-somelib)
+[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/depot_tools_installer%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/depot_tools_installer%3Abincrafters/_latestVersion)
+[![Build Status](https://travis-ci.com/bincrafters/conan-depot_tools_installer.svg?branch=stable%2F20190916)](https://travis-ci.com/bincrafters/conan-depot_tools_installer)
+[![Build status](https://ci.appveyor.com/api/projects/status/sxs9n6vb8nqa92l5?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-depot_tools_installer)
 
-[Conan.io](https://conan.io) package for [somelib](https://github.com/someauthor/somelib) project
+[Conan.io](https://conan.io) package for [depot_tools_installer](https://github.com/someauthor/depot_tools_installer) project
 
-The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/somelib%3Abincrafters).
+The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/depot_tools_installer%3Abincrafters).
 
 ## For Users: Use this package
 
 ### Basic setup
 
-    $ conan install somelib/0.0.0@bincrafters/stable
+    $ conan install depot_tools_installer/20190916@bincrafters/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    somelib/0.0.0@bincrafters/stable
+    depot_tools_installer/20190916@bincrafters/stable
 
     [generators]
     txt
@@ -44,7 +44,7 @@ The following command both runs all the steps of the conan file, and publishes t
 
 ## Upload
 
-    $ conan upload somelib/0.0.0@bincrafters/stable --all -r bincrafters
+    $ conan upload depot_tools_installer/20190916@bincrafters/stable --all -r bincrafters
 
 ## License
 [LICENSE_TYPE](LICENSE)
