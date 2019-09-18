@@ -28,9 +28,9 @@ class DepotToolsConan(ConanFile):
 
     def source(self):
         commit = "cc6f585f055ae696170b22f0e8db906d27afe636"
-        git = Git(folder=self._source_subfolder)
-        git.clone(self.homepage + ".git")
-        git.checkout(commit)
+        tools.mkdir(self._source_subfolder)
+        with tools.chdir(self._source_subfolder):
+            tools.get("{}/+archive/{}.tar.gz".format(self.homepage, commit))
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
