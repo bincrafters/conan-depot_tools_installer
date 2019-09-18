@@ -34,10 +34,7 @@ class DepotToolsConan(ConanFile):
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
-        if tools.os_info.is_windows:
-            self.copy(pattern="*", dst=".", src=".")
-        else:
-            self.copy(pattern="*", dst=".", src=self._source_subfolder)
+        self.copy(pattern="*", dst=".", src=self._source_subfolder)
         self._fix_permissions()
 
     def _fix_permissions(self):
