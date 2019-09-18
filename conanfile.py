@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from conans import ConanFile, tools
+from conans.tools import Git
 import os
 import sys
 
@@ -26,14 +27,17 @@ class DepotToolsConan(ConanFile):
             self.output.warn("Chromium depot_tools is not well supported by Python 3!")
 
     def source(self):
-        commit = "e5641be5fe309f40aad850d4d1e1ca607768572c"
-        tools.mkdir(self._source_subfolder)
-        with tools.chdir(self._source_subfolder):
-            tools.get("{}/+archive/{}.tar.gz".format(self.homepage, commit))
+        commit = "cc6f585f055ae696170b22f0e8db906d27afe636"
+        git = Git(folder=self._source_subfolder)
+        git.clone(self.homepage + ".git")
+        git.checkout(commit)
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
-        self.copy(pattern="*", dst="bin", src=self._source_subfolder)
+        if tools.os_info.is_windows:
+            self.copy(pattern="*", dst=".", src=".")
+        else:
+            self.copy(pattern="*", dst=".", src=self._source_subfolder)
         self._fix_permissions()
 
     def _fix_permissions(self):
@@ -42,18 +46,18 @@ class DepotToolsConan(ConanFile):
             os.chmod(name, os.stat(name).st_mode | 0o111)
 
         if os.name == 'posix':
-            for root, _, files in os.walk(os.path.join(self.package_folder, "bin")):
-                for file in files:
-                    filename = os.path.join(root, file)
+            for root, _, files in os.walk(self.package_folder):
+                for file_it in files:
+                    filename = os.path.join(root, file_it)
                     with open(filename, 'rb') as f:
                         sig = f.read(4)
                         if type(sig) is str:
                             sig = [ord(s) for s in sig]
                         if len(sig) >= 2 and sig[0] == 0x23 and sig[1] == 0x21:
-                            self.output.info('chmod on script file %s' % file)
+                            self.output.info('chmod on script file %s' % file_it)
                             chmod_plus_x(filename)
                         elif sig == [0x7F, 0x45, 0x4C, 0x46]:
-                            self.output.info('chmod on ELF file %s' % file)
+                            self.output.info('chmod on ELF file %s' % file_it)
                             chmod_plus_x(filename)
                         elif \
                                 sig == [0xCA, 0xFE, 0xBA, 0xBE] or \
@@ -62,12 +66,11 @@ class DepotToolsConan(ConanFile):
                                 sig == [0xCF, 0xFA, 0xED, 0xFE] or \
                                 sig == [0xFE, 0xED, 0xFA, 0xCE] or \
                                 sig == [0xCE, 0xFA, 0xED, 0xFE]:
-                            self.output.info('chmod on Mach-O file %s' % file)
+                            self.output.info('chmod on Mach-O file %s' % file_it)
                             chmod_plus_x(filename)
 
     def package_info(self):
-        bin_folder = os.path.join(self.package_folder, "bin")
-        self.output.info("Append %s to environment variable PATH" % bin_folder)
-        self.env_info.PATH.append(bin_folder)
+        self.output.info("Append %s to environment variable PATH" % self.package_folder)
+        self.env_info.PATH.append(self.package_folder)
         # Don't update gclient automatically when running it
         self.env_info.DEPOT_TOOLS_UPDATE = "0"
