@@ -43,7 +43,7 @@ class DepotToolsConan(ConanFile):
                 dest = os.readlink(symlink)
                 os.remove(symlink)
                 shutil.copy(os.path.join(root, dest), symlink, follow_symlinks=False)
-                self.output.warn("Replaced symlink '%s' with its destination file '%s'" % (symlink, dest))
+                self.output.info("Replaced symlink '%s' with its destination file '%s'" % (symlink, dest))
 
     def source(self):
         commit = "cc6f585f055ae696170b22f0e8db906d27afe636"
