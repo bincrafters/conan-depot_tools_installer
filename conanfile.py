@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from conans import ConanFile, tools
-from conans.tools import Git
+from conans.tools import os_info
 import os
 import sys
+import shutil
 
 
 class DepotToolsConan(ConanFile):
@@ -26,11 +27,30 @@ class DepotToolsConan(ConanFile):
         if sys.version_info.major == 3:
             self.output.warn("Chromium depot_tools is not well supported by Python 3!")
 
+    def _dereference_symlinks(self):
+        """
+        Windows 10 started to introduce support for symbolic links. Unfortunately
+        it caused a lot of trouble during packaging. Namely, opening symlinks causes
+        `OSError: Invalid argument` rather than actually following the symlinks.
+        Therefore, this workaround simply copies the destination file over the symlink
+        """
+        if not os_info.is_windows:
+            return
+
+        for root, dirs, files in os.walk(self._source_subfolder):
+            symlinks = [os.path.join(root, f) for f in files if os.path.islink(os.path.join(root, f))]
+            for symlink in symlinks:
+                dest = os.readlink(symlink)
+                os.remove(symlink)
+                shutil.copy(os.path.join(root, dest), symlink, follow_symlinks=False)
+                self.output.info("Replaced symlink '%s' with its destination file '%s'" % (symlink, dest))
+
     def source(self):
         commit = "cc6f585f055ae696170b22f0e8db906d27afe636"
         tools.mkdir(self._source_subfolder)
         with tools.chdir(self._source_subfolder):
             tools.get("{}/+archive/{}.tar.gz".format(self.homepage, commit))
+        self._dereference_symlinks()
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
