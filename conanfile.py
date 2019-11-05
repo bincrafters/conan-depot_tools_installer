@@ -12,7 +12,6 @@ class DepotToolsConan(ConanFile):
     description = "A collection of tools for dealing with Chromium development"
     url = "https://github.com/reneme/conan-depot_tools_installer"
     homepage = "https://chromium.googlesource.com/chromium/tools/depot_tools"
-    author = "Bincrafters <bincrafters@gmail.com>"
     no_copy_source = True
     short_paths = True
 
