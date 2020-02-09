@@ -7,17 +7,15 @@ import shutil
 
 class DepotToolsConan(ConanFile):
     name = "depot_tools_installer"
-    version = "20190919"
+    version = "20200207"
+    _commit = "3b8094ac6239876a0c03b2d0b6e42d73d633554b"
     license = "BSD-3-Clause"
     description = "A collection of tools for dealing with Chromium development"
-    url = "https://github.com/reneme/conan-depot_tools_installer"
+    url = "https://github.com/bincrafters/conan-depot_tools_installer"
     homepage = "https://chromium.googlesource.com/chromium/tools/depot_tools"
     no_copy_source = True
     short_paths = True
-
-    @property
-    def _source_subfolder(self):
-        return "source_subfolder"
+    _source_subfolder = "source_subfolder"
 
     def configure(self):
         if sys.version_info.major == 3:
@@ -42,10 +40,9 @@ class DepotToolsConan(ConanFile):
                 self.output.info("Replaced symlink '%s' with its destination file '%s'" % (symlink, dest))
 
     def source(self):
-        commit = "7735f52c6d421af7dd77bdab374798c60bf571b3"
         tools.mkdir(self._source_subfolder)
         with tools.chdir(self._source_subfolder):
-            tools.get("{}/+archive/{}.tar.gz".format(self.homepage, commit))
+            tools.get("{}/+archive/{}.tar.gz".format(self.homepage, self.commit))
         self._dereference_symlinks()
 
     def package(self):
