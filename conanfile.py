@@ -42,7 +42,7 @@ class DepotToolsConan(ConanFile):
     def source(self):
         tools.mkdir(self._source_subfolder)
         with tools.chdir(self._source_subfolder):
-            tools.get("{}/+archive/{}.tar.gz".format(self.homepage, self.commit))
+            tools.get("{}/+archive/{}.tar.gz".format(self.homepage, self._commit))
         self._dereference_symlinks()
 
     def package(self):
