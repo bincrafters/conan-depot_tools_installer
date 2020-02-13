@@ -15,6 +15,7 @@ class DepotToolsConan(ConanFile):
     homepage = "https://chromium.googlesource.com/chromium/tools/depot_tools"
     no_copy_source = True
     short_paths = True
+    settings = "os_build"
     _source_subfolder = "source_subfolder"
 
     def configure(self):
@@ -28,7 +29,7 @@ class DepotToolsConan(ConanFile):
         `OSError: Invalid argument` rather than actually following the symlinks.
         Therefore, this workaround simply copies the destination file over the symlink
         """
-        if not os_info.is_windows:
+        if self.settings.os_build != "Windows":
             return
 
         for root, dirs, files in os.walk(self._source_subfolder):
@@ -47,7 +48,7 @@ class DepotToolsConan(ConanFile):
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
-        self.copy(pattern="*", dst=".", src=self._source_subfolder)
+        self.copy(pattern="*", dst="bin", src=self._source_subfolder)
         self._fix_permissions()
 
     def _fix_permissions(self):
@@ -55,7 +56,7 @@ class DepotToolsConan(ConanFile):
         def chmod_plus_x(name):
             os.chmod(name, os.stat(name).st_mode | 0o111)
 
-        if os.name == 'posix':
+        if self.settings.os_build != "Windows":
             for root, _, files in os.walk(self.package_folder):
                 for file_it in files:
                     filename = os.path.join(root, file_it)
@@ -80,7 +81,9 @@ class DepotToolsConan(ConanFile):
                             chmod_plus_x(filename)
 
     def package_info(self):
-        self.output.info("Append %s to environment variable PATH" % self.package_folder)
-        self.env_info.PATH.append(self.package_folder)
+        bindir = os.path.join(self.package_folder, "bin")
+        self.output.info("Appending PATH environment variable: {}".format(bindir))
+        self.env_info.PATH.append(bindir)
+
         # Don't update gclient automatically when running it
         self.env_info.DEPOT_TOOLS_UPDATE = "0"
