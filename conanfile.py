@@ -7,8 +7,8 @@ import shutil
 
 class DepotToolsConan(ConanFile):
     name = "depot_tools_installer"
-    version = "20200207"
-    _commit = "3b8094ac6239876a0c03b2d0b6e42d73d633554b"
+    version = "20200515"
+    _commit = "5e0a4a6b8088fc55794b51d1919c13ac4ae6ef0c"
     license = "BSD-3-Clause"
     description = "A collection of tools for dealing with Chromium development"
     url = "https://github.com/bincrafters/conan-depot_tools_installer"
