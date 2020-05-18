@@ -18,10 +18,6 @@ class DepotToolsConan(ConanFile):
     settings = "os_build"
     _source_subfolder = "source_subfolder"
 
-    def configure(self):
-        if sys.version_info.major == 3:
-            self.output.warn("Chromium depot_tools is not well supported by Python 3!")
-
     def _dereference_symlinks(self):
         """
         Windows 10 started to introduce support for symbolic links. Unfortunately
