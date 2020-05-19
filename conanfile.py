@@ -18,6 +18,9 @@ class DepotToolsConan(ConanFile):
     settings = "os_build"
     _source_subfolder = "source_subfolder"
 
+    def configure(self):
+        self.output.warn("This version of depot_tools will perform opportunistic auto-updates.")
+
     def _dereference_symlinks(self):
         """
         Windows 10 started to introduce support for symbolic links. Unfortunately
@@ -80,3 +83,18 @@ class DepotToolsConan(ConanFile):
         bindir = os.path.join(self.package_folder, "bin")
         self.output.info("Appending PATH environment variable: {}".format(bindir))
         self.env_info.PATH.append(bindir)
+
+        # Don't update gclient automatically when running it
+        #
+        # Note: This version of depot_tools does not work on Windows, when the
+        #       auto-update feature is enabled. The issue is known upstream and
+        #       should hopefully be fixed soon.
+        #
+        # TODO: Disable auto-update as soon as the above-described issue is
+        #       fixed upstream.
+        #
+        # Relevant links:
+        #  * Bug Ticket: https://github.com/bincrafters/community/issues/1198
+        #  * Upstream Ticket: https://bugs.chromium.org/p/chromium/issues/detail?id=1067590
+        #  * depot_tools docs: https://dev.chromium.org/developers/how-tos/depottools#TOC-Disabling-auto-update
+        # self.env_info.DEPOT_TOOLS_UPDATE = "0"
